@@ -14,15 +14,16 @@ const UserPanelNavigation = () => {
     const dispatch = useDispatch()
     const router = useRouter()
 
-        const handleLogout = async () => {
+    const handleLogout = async () => {
         try {
             const { data: logoutResponse } = await axios.post('/api/auth/logout')
-            if(!logoutResponse.success) {
+            if (!logoutResponse.success) {
                 throw new Error(logoutResponse.message)
             }
             dispatch(logout())
             showToast('success', logoutResponse.message)
-            router.push(WEBSITE_LOGIN)
+            // router.push(WEBSITE_LOGIN)
+            window.location.href = WEBSITE_LOGIN
         } catch (error) {
             showToast('error', error.message)
         }
