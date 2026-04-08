@@ -72,12 +72,12 @@ const Cart = () => {
             <h2 className="flex justify-between items-center text-lg font-semibold"><span>Subtotal</span> <span>{subtotal?.toLocaleString('en-PK', { style: 'currency', currency: "PKR" })}</span></h2>
             <h2 className="flex justify-between items-center text-lg font-semibold"><span>Discount</span> <span>{discount?.toLocaleString('en-PK', { style: 'currency', currency: "PKR" })}</span></h2>
 
-            <div className="flex justify-between gap-5 mt-3">
-              <Button type="button" asChild variant="secondary" className="w-[200px]">
+            <div className="flex justify-between nd:gap-5 gap-3 mt-3">
+              <Button type="button" asChild variant="secondary" className="md:w-[200] w-[150]">
                 <Link href={WEBSITE_CART}>View Cart</Link>
               </Button>
               {cart.count ? 
-              <Button type="button" asChild className="w-[200px]" onClick={() => setOpen(false)}>
+              <Button type="button" asChild className="md:w-[200] w-[150]" onClick={() => setOpen(false)}>
                 <Link href={WEBSITE_CHECKOUT}>Checkout</Link>
               </Button> :
               <button type="button" onClick={() => showToast('error', "Your cart is empty")}></button>
