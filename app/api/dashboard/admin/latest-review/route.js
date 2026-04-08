@@ -19,7 +19,7 @@ export async function GET() {
                 path: 'media',
                 select: 'secure_url'
             }
-        })
+        }).lean()
 
         return response(true, 200, 'latest review', latestReview)
     } catch (error) {

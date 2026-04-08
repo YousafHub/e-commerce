@@ -2,7 +2,6 @@ import { connectDB } from "@/lib/databaseConnection";
 import { catchError, response } from "@/lib/helperfunction";
 import UserModel from "@/models/User.model";
 import { jwtVerify } from "jose";
-import { isValidObjectId } from "mongoose";
 
 export async function POST(request) {
    try {
