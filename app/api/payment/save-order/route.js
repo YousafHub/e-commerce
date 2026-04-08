@@ -5,9 +5,9 @@ import z from "zod";
 import OrderModel from "@/models/Order.model";
 import ProductVariantModel from "@/models/ProductVariant.model";
 import cloudinary from "@/lib/cloudinary";
-import { isAuthenticated } from "@/lib/authentication";
 import { orderNotification } from "@/email/orderNotification";
 import { sendMail } from "@/lib/sendMail";
+import { isAuthenticated } from "@/lib/authentication";
 
 const productSchema = z.object({
     productId: z.string().length(24, 'Invalid product Id format'),
@@ -42,9 +42,14 @@ export async function POST(req) {
     try {
         await connectDB();
 
-        // Auth check
         const auth = await isAuthenticated('user');
-        if (!auth.isAuth) throw new Error('Unauthorized access. Please login to place order.');
+        if (!auth.isAuth) {
+            return Response.json({
+                success: false,
+                message: 'Please login to place order',
+                requireLogin: true
+            }, { status: 401 });
+        }
 
         const formData = await req.formData();
 
@@ -146,7 +151,7 @@ export async function POST(req) {
             },
         });
 
-             try {
+        try {
             const mailData = {
                 _id: newOrder.transaction_id,
                 orderDetailsUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/order-details/${newOrder._id}`
@@ -160,6 +165,13 @@ export async function POST(req) {
         return response(true, 200, "Order placed successfully! We'll verify your payment soon.", newOrder);
 
     } catch (error) {
+        if (error.message ==='Unauthorized access. Please login to place order.') {
+            return Response.json({ 
+                success: false, 
+                message: 'Please login to place order',
+                requireLogin: true 
+            }, { status: 401 });
+        }
         return catchError(error);
     }
 }
